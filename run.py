@@ -61,7 +61,7 @@ def complex_reply():
         msg['Text'](fileDir)
         for destination in destinations(msg):
             itchat.send('@%s@%s' % ('img' if msg['Type'] == 'Picture' or msg['Type'] == 'Gif' else 'fil', fileDir), destination)
-            itchat.send('%s by %s' % (msg['Type'], ''), destination)
+            itchat.send('%s by %s' % (msg['Type'], get_sender_name(msg)), destination)
     itchat.run()
 
 
