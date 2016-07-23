@@ -280,7 +280,7 @@ class client(object):
                         for block in r.iter_content(1024):
                             f.write(block)
                 msg = {
-                    'Type': 'Picture',
+                    'Type': 'Picture' if m['MsgType'] == 3 else 'Gif',
                     'Text': download_picture,}
             elif m['MsgType'] == 34: # voice
                 def download_voice(voiceDir):

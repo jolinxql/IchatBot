@@ -49,19 +49,19 @@ def complex_reply():
         for destination in destinations(msg):
             itchat.send('%s: %s%s' % (get_sender_name(msg), msg['Text'],url), destination)
 
-    @itchat.msg_register(['Picture', 'Recording', 'Attachment', 'Video'], isGroupChat=True)
-    def download_files(msg):
-        fileDir = '%s%s' % (msg['Type'], int(time.time()))
-        msg['Text'](fileDir)
-        for destination in destinations(msg):
-            itchat.send('@%s@%s' % ('img' if msg['Type'] == 'Picture' else 'fil', fileDir), destination)
-            itchat.send('%s by %s' % (msg['Type'], get_sender_name(msg)), destination)
-
     # @itchat.msg_register(['Note','Card', 'Sharing'])
     # def text_reply(msg):
     #     print(msg)
     #     itchat.send('@url@%s' % (msg['Content']), msg['FromUserName'])
 
+    @itchat.msg_register(['Picture', 'Recording', 'Attachment', 'Video', 'Gif'])
+    def download_files(msg):
+        fileDir = '%s%s' % (msg['Type'], int(time.time()))
+        if msg['Type'] == 'Gif': fileDir += '.gif'
+        msg['Text'](fileDir)
+        for destination in destinations(msg):
+            itchat.send('@%s@%s' % ('img' if msg['Type'] == 'Picture' or msg['Type'] == 'Gif' else 'fil', fileDir), destination)
+            itchat.send('%s by %s' % (msg['Type'], ''), destination)
     itchat.run()
 
 
