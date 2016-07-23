@@ -54,7 +54,7 @@ def complex_reply():
     #     print(msg)
     #     itchat.send('@url@%s' % (msg['Content']), msg['FromUserName'])
 
-    @itchat.msg_register(['Picture', 'Recording', 'Attachment', 'Video', 'Gif'])
+    @itchat.msg_register(['Picture', 'Recording', 'Attachment', 'Video', 'Gif'], isGroupChat=True)
     def download_files(msg):
         fileDir = '%s%s' % (msg['Type'], int(time.time()))
         if msg['Type'] == 'Gif': fileDir += '.gif'
