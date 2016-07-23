@@ -2,6 +2,7 @@ import os, sys, time, re
 import threading, subprocess
 import json, xml.dom.minidom, mimetypes
 import copy, pickle
+from cgi import escape
 
 from . import config, storage, out, tools
 
@@ -403,6 +404,21 @@ class client(object):
             'Msg': {
                 'Type': 1,
                 'Content': msg,
+                'FromUserName': self.storageClass.userName,
+                'ToUserName': (toUserName if toUserName else self.storageClass.userName),
+                'LocalID': int(time.time()),
+                'ClientMsgId': int(time.time()),
+                }, }
+        headers = { 'ContentType': 'application/json; charset=UTF-8' }
+        r = self.s.post(url, data = json.dumps(payloads, ensure_ascii = False).encode('utf8'), headers = headers)
+    def send_content(self, msg = 'Test Message', toUserName = None):
+        url = '%s/webwxsendmsg'%self.loginInfo['url']
+        payloads = {
+            'BaseRequest': self.loginInfo['BaseRequest'],
+            'Msg': {
+                'MsgType': 49,
+                'Type': 49,
+                'Content': escape(msg),
                 'FromUserName': self.storageClass.userName,
                 'ToUserName': (toUserName if toUserName else self.storageClass.userName),
                 'LocalID': int(time.time()),

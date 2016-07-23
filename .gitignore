@@ -5,3 +5,7 @@ itchat.egg-info/*
 *.swp
 test.py
 itchat.pkl
+.idea
+Picture*
+Recording*
+Video*

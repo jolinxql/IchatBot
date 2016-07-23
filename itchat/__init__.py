@@ -40,8 +40,8 @@ def send(msg, toUserName = None):
         return __client.send_file(msg[5:], toUserName)
     elif msg[:5] == '@img@':
         return __client.send_image(msg[5:], toUserName)
-    elif msg[:5] == '@msg@':
-        return __client.send_msg(msg[5:], toUserName)
+    elif msg[:5] == '@url@':
+        return __client.send_content(msg[5:], toUserName)
     else:
         return __client.send_msg(msg, toUserName)
 
