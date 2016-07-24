@@ -1,4 +1,5 @@
 # coding=utf-8
+import threading
 import time
 
 import itchat
@@ -10,11 +11,14 @@ PREFIX = u'机器人'
 
 def update_groups():
     global groups
+    groups = []
     for group in itchat.get_chatrooms(update=True):
         if group['NickName'].startswith(PREFIX):
             groups.append(group['UserName'])
             itchat.get_batch_contract(group['UserName'])
     print(groups)
+    print(time.ctime())
+    threading.Timer(55, update_groups).start()
 
 
 def destinations(msg):
@@ -30,12 +34,17 @@ def destinations(msg):
 
 
 def complex_reply():
-    @itchat.msg_register(['Text', 'Map', 'Note', 'Card', 'Sharing'], isGroupChat=True)
+    @itchat.msg_register(['Text', 'Map', 'Card', 'Sharing'], isGroupChat=True)
     def text_reply(msg):
         url = ''
         if msg['Url']: url = ' - ' + htmlParser.unescape(msg['Url'])
         for destination in destinations(msg):
             itchat.send('%s: %s%s' % (msg['ActualDisplayName'], msg['Text'], url), destination)
+
+    @itchat.msg_register(['Note'], isGroupChat=True)
+    def text_reply(msg):
+        for destination in destinations(msg):
+            itchat.send(msg['Text'], destination)
 
     # @itchat.msg_register(['Note','Card', 'Sharing'])
     # def text_reply(msg):
