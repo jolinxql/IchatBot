@@ -45,6 +45,8 @@ class client(object):
             self.start_receiving()
             return True
         else:
+            self.loginInfo = {}
+            self.s.cookies.clear()
             return False
     def auto_login(self, enableCmdQR = False):
         def open_QR():
@@ -236,7 +238,6 @@ class client(object):
 
         regx = r'window.synccheck={retcode:"(\d+)",selector:"(\d+)"}'
         pm = re.search(regx, r.text)
-
         if pm.group(1) != '0' : return None
         return pm.group(2)
     def __get_msg(self):

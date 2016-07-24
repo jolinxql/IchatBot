@@ -66,6 +66,6 @@ def complex_reply():
 
 
 if __name__ == '__main__':
-    itchat.auto_login(hotReload=False)
+    itchat.auto_login(hotReload=True)
     complex_reply()
-    itchat.dump_login_status()
+    # itchat.dump_login_status()
