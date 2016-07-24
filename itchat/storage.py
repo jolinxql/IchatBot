@@ -35,5 +35,9 @@ class Storage:
         return r
     def find_nickname(self, u):
         r = []
-        for  member in self.memberList:
+        for member in self.memberList:
             if member['UserName'] == u: return member['NickName']
+
+    def find_group_nickname(self, g):
+        for group in self.chatroomList:
+            if group['UserName'] == g: return group['NickName']

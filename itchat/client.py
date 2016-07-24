@@ -157,6 +157,7 @@ class client(object):
             tools.emoji_formatter(member, 'NickName')
             tools.emoji_formatter(member, 'DisplayName')
         j['isAdmin'] = j['OwnerUin'] == int(self.loginInfo['wxuin'])
+        self.storageClass.groupDict[userName] = {member['UserName']: member for member in j['MemberList']}
         return j
     def get_contract(self, update = False):
         if 1 < len(self.memberList) and not update: return copy.deepcopy(self.memberList)
@@ -389,12 +390,14 @@ class client(object):
         if not r: return
         actualUserName, content = r.groups()
         try:
-            self.storageClass.groupDict[msg['FromUserName']][ActualUserName]
+            self.storageClass.groupDict[msg['FromUserName']][actualUserName]
         except:
             groupMemberList = self.get_batch_contract(msg['FromUserName'])['MemberList']
             self.storageClass.groupDict[msg['FromUserName']] = {member['UserName']: member for member in groupMemberList}
         msg['ActualUserName'] = actualUserName
         msg['ActualNickName'] = self.storageClass.groupDict[msg['FromUserName']][actualUserName]['NickName']
+        msg['ActualDisplayName'] = self.storageClass.groupDict[msg['FromUserName']][actualUserName]['DisplayName'] or msg['ActualNickName']
+        msg['ActualDisplayName'] += '#%s' % (self.storageClass.find_group_nickname(msg['FromUserName']))
         msg['Content']        = content
         msg['isAt']           = u'@%s\u2005'%self.storageClass.nickName in msg['Content']
     def send_msg(self, msg = 'Test Message', toUserName = None):
@@ -418,6 +421,7 @@ class client(object):
             'Msg': {
                 'MsgType': 49,
                 'Type': 49,
+                'AppMsgType': 5,
                 'Content': escape(msg),
                 'FromUserName': self.storageClass.userName,
                 'ToUserName': (toUserName if toUserName else self.storageClass.userName),
