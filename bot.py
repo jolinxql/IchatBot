@@ -1,6 +1,8 @@
-# coding=utf-8
+# coding: utf-8
+
 import threading
 import time
+import xml.sax.saxutils as saxutils
 
 import itchat
 from itchat.tools import htmlParser
@@ -39,8 +41,10 @@ def complex_reply():
         url = ''
         if msg['Url']: url = ' - ' + htmlParser.unescape(msg['Url'])
         for destination in destinations(msg):
-            itchat.send('%s: %s%s' % (msg['ActualDisplayName'], msg['Text'], url), destination)
-
+            if url == '':
+                itchat.send('%s: \n%s%s' % (msg['ActualDisplayName'], msg['Text'], url), destination)
+            else:
+                itchat.send('%s共享了一个链接: \n%s%s'.decode('utf-8', 'replace') % (msg['ActualDisplayName'], msg['Text'], url), destination)
     @itchat.msg_register(['Note'], isGroupChat=True)
     def text_reply(msg):
         for destination in destinations(msg):
@@ -53,13 +57,18 @@ def complex_reply():
 
     @itchat.msg_register(['Picture', 'Recording', 'Attachment', 'Video', 'Gif'], isGroupChat=True)
     def download_files(msg):
-        fileDir = '%s%s' % (msg['Type'], int(time.time()))
+        dict = {'Picture': "图片", "Gif": "表情", "Recording": "录音", "Video": "小视频", "Attachment": "文件"}
+        fileDir = './storage/%s%s' % (msg['Type'], int(time.time()))
         if msg['Type'] == 'Gif': fileDir += '.gif'
         msg['Text'](fileDir)
         for destination in destinations(msg):
-            itchat.send('@%s@%s' % ('img' if msg['Type'] == 'Picture' or msg['Type'] == 'Gif' else 'fil', fileDir),
+            itchat.send('%s发送了%s'.decode('utf-8', 'replace') % (msg['ActualDisplayName'], dict[msg['Type']].decode('utf-8', 'replace')), destination)
+            print itchat.send('@%s@%s' % ('img' if msg['Type'] == 'Picture' or msg['Type'] == 'Gif' else 'fil', fileDir),
                         destination)
-            itchat.send('%s by %s' % (msg['Type'], msg['ActualDisplayName']), destination)
+            if not itchat.send('@%s@%s' % ('img' if msg['Type'] == 'Picture' or msg['Type'] == 'Gif' else 'fil', fileDir),
+                        destination):
+                itchat.send('[暂不支持官方表情]'.decode('utf-8', 'replace'), destination)
+
 
     update_groups()
     itchat.run()

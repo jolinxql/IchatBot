@@ -1,12 +1,16 @@
+# coding: utf-8
+
 import os, sys, time, re
 import threading, subprocess
 import json, xml.dom.minidom, mimetypes
 import copy, pickle
+import xml.sax.saxutils as saxutils
 from cgi import escape
 
 from . import config, storage, out, tools
 
 import requests
+PREFIX = u'机器人'
 
 BASE_URL = config.BASE_URL
 
@@ -270,7 +274,8 @@ class client(object):
                 else:
                     msg = {
                         'Type': 'Text',
-                        'Text': m['Content'],}
+                        'Text': m['Content'].replace('<br/>','\n'),}
+
             elif m['MsgType'] == 3 or m['MsgType'] == 47: # picture
                 def download_picture(picDir):
                     url = '%s/webwxgetmsgimg'%self.loginInfo['url']
@@ -397,11 +402,13 @@ class client(object):
             self.storageClass.groupDict[msg['FromUserName']] = {member['UserName']: member for member in groupMemberList}
         msg['ActualUserName'] = actualUserName
         msg['ActualNickName'] = self.storageClass.groupDict[msg['FromUserName']][actualUserName]['NickName']
-        msg['ActualDisplayName'] = self.storageClass.groupDict[msg['FromUserName']][actualUserName]['DisplayName'] or msg['ActualNickName']
-        msg['ActualDisplayName'] += '#%s' % (self.storageClass.find_group_nickname(msg['FromUserName']))
+        msg['ActualDisplayName'] = '【%s - '.decode('utf8', 'replace') % (self.storageClass.groupDict[msg['FromUserName']][actualUserName]['DisplayName'] or msg['ActualNickName'])
+        msg['ActualDisplayName'] += '%s】'.decode('utf8', 'replace') % (self.__get_group_short_name(self.storageClass.find_group_nickname(msg['FromUserName'])))
+
         msg['Content']        = content
         msg['isAt']           = u'@%s\u2005'%self.storageClass.nickName in msg['Content']
     def send_msg(self, msg = 'Test Message', toUserName = None):
+        print msg
         url = '%s/webwxsendmsg'%self.loginInfo['url']
         payloads = {
             'BaseRequest': self.loginInfo['BaseRequest'],
@@ -483,7 +490,11 @@ class client(object):
     def send_image(self, fileDir, toUserName = None):
         if toUserName is None: toUserName = self.storageClass.userName
         mediaId = self.__upload_file(fileDir, isPicture = not fileDir[-4:] == '.gif')
-        if mediaId is None: return False
+        if mediaId is None or mediaId == '':
+            print 'null'
+            return False
+        else:
+            print "'%s'" % mediaId
         url = '%s/webwxsendmsgimg?fun=async&f=json'%self.loginInfo['url']
         payloads = {
             'BaseRequest': self.loginInfo['BaseRequest'],
@@ -549,6 +560,11 @@ class client(object):
             'AddMemberList': ','.join([member['UserName'] for member in memberList]), }
         headers = {'content-type': 'application/json; charset=UTF-8'}
         r = self.s.post(url, data=json.dumps(params),headers=headers)
+
+    def __get_group_short_name(self, groupName):
+        dict = {"1": "①", "2": "②", "3": "③", "4": "④"}
+        [p, s] = groupName.split(PREFIX)
+        return groupName[0] + dict[s].decode('utf8', 'replace')
 
 if __name__ == '__main__':
     wcc = WeChatClient()
