@@ -65,9 +65,7 @@ def complex_reply():
             itchat.send('%s发送了%s'.decode('utf-8', 'replace') % (msg['ActualDisplayName'], dict[msg['Type']].decode('utf-8', 'replace')), destination)
             print itchat.send('@%s@%s' % ('img' if msg['Type'] == 'Picture' or msg['Type'] == 'Gif' else 'fil', fileDir),
                         destination)
-            if not itchat.send('@%s@%s' % ('img' if msg['Type'] == 'Picture' or msg['Type'] == 'Gif' else 'fil', fileDir),
-                        destination):
-                itchat.send('[暂不支持官方表情]'.decode('utf-8', 'replace'), destination)
+
 
 
     update_groups()

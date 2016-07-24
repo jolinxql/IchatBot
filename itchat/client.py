@@ -491,10 +491,8 @@ class client(object):
         if toUserName is None: toUserName = self.storageClass.userName
         mediaId = self.__upload_file(fileDir, isPicture = not fileDir[-4:] == '.gif')
         if mediaId is None or mediaId == '':
-            print 'null'
+            self.send_msg('[暂不支持官方表情]'.decode('utf-8', 'replace'), toUserName)
             return False
-        else:
-            print "'%s'" % mediaId
         url = '%s/webwxsendmsgimg?fun=async&f=json'%self.loginInfo['url']
         payloads = {
             'BaseRequest': self.loginInfo['BaseRequest'],
