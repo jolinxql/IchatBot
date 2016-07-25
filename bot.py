@@ -1,4 +1,5 @@
 # coding=utf-8
+import sys
 import threading
 import time
 
@@ -16,9 +17,10 @@ def update_groups():
         if group['NickName'].startswith(PREFIX):
             groups.append(group['UserName'])
             itchat.get_batch_contract(group['UserName'])
-    print(groups)
-    print(time.ctime())
-    threading.Timer(55, update_groups).start()
+    print(time.time())
+    thread = threading.Timer(55, update_groups)
+    thread.daemon = True
+    thread.start()
 
 
 def destinations(msg):
