@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 # coding: utf-8
 
+=======
+# coding=utf-8
+import sys
+>>>>>>> ced62f212414083dfb9ddce8a6e3120a6e35aa27
 import threading
 import time
 import sys
@@ -18,6 +23,7 @@ def update_groups():
         if group['NickName'].startswith(PREFIX):
             groups.append(group['UserName'])
             itchat.get_batch_contract(group['UserName'])
+            
     print(groups)
     print(time.time())
     thread = threading.Timer(55, update_groups)
