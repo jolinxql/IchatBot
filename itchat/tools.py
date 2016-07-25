@@ -54,7 +54,7 @@ def print_qr(fileDir):
 try:
     from PIL import Image 
     def print_cmd_qr(fileDir, size = 37, padding = 3,
-            white = BLOCK, black = '  ', enableCmdQR = True):
+            white = BLOCK+BLOCK, black = '  ', enableCmdQR = True):
         img     = Image.open(fileDir)
         times   = img.size[0] / (size + padding * 2)
         rgb     = img.convert('RGB')
