@@ -10,7 +10,7 @@ from cgi import escape
 from . import config, storage, out, tools
 
 import requests
-PREFIX = u'机器人'
+PREFIX = u'机器人-'
 
 BASE_URL = config.BASE_URL
 
