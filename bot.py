@@ -19,7 +19,7 @@ def update_groups():
             groups.append(group['UserName'])
             itchat.get_batch_contract(group['UserName'])
 
-    print('groups:' + groups)
+    print(groups)
     print(time.time())
     thread = threading.Timer(55, update_groups)
     thread.daemon = True
