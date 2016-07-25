@@ -7,7 +7,7 @@ import itchat
 from itchat.tools import htmlParser
 
 groups = []
-block_groups = {u'机器人-U'}
+block_groups = [u'机器人-U']
 PREFIX = u'机器人-'
 
 
@@ -15,7 +15,7 @@ def update_groups():
     global groups
     groups = []
     for group in itchat.get_chatrooms(update=True):
-        if group['NickName'].startswith(PREFIX) and block_groups.get(group['NickName']) is None:
+        if group['NickName'].startswith(PREFIX) and (group['NickName'] not in block_groups):
             groups.append(group['UserName'])
             itchat.get_batch_contract(group['UserName'])
 
