@@ -7,6 +7,7 @@ import itchat
 from itchat.tools import htmlParser
 
 groups = []
+bgroups = []
 block_groups = [u'机器人-U']
 PREFIX = u'机器人-'
 
@@ -18,8 +19,11 @@ def update_groups():
         if group['NickName'].startswith(PREFIX):
             groups.append(group['UserName'])
             itchat.get_batch_contract(group['UserName'])
+        if group['NickName'] in block_groups :
+            bgroups.append(group['UserName'])
 
     print(groups)
+    print(bgroups)
     print(time.time())
     thread = threading.Timer(55, update_groups)
     thread.daemon = True
@@ -32,7 +36,7 @@ def destinations(msg):
     for gid in groups:
         if gid != msg['FromUserName']:
             destinations.append(gid)
-        elif gid not in block_groups:
+        elif gid not in bgroups:
             in_group = True
     if not in_group: return []
     return destinations
