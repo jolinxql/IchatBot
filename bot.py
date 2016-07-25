@@ -53,10 +53,11 @@ def complex_reply():
                 itchat.send('%s: \n%s%s' % (msg['ActualDisplayName'], msg['Text'], url), destination)
             else:
                 itchat.send('%s共享了一个链接: \n%s%s'.decode('utf-8', 'replace') % (msg['ActualDisplayName'], msg['Text'], url), destination)
-    @itchat.msg_register(['Note'], isGroupChat=True)
-    def text_reply(msg):
-        for destination in destinations(msg):
-            itchat.send(msg['Text'], destination)
+
+    # @itchat.msg_register(['Note'], isGroupChat=True)
+    # def text_reply(msg):
+    #     for destination in destinations(msg):
+    #         itchat.send(msg['Text'], destination)
 
     # @itchat.msg_register(['Note','Card', 'Sharing'])
     # def text_reply(msg):
