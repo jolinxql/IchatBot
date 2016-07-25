@@ -15,6 +15,7 @@ PREFIX = u'西码会-'
 def update_groups():
     global groups
     groups = []
+    bgroups = []
     for group in itchat.get_chatrooms(update=True):
         if group['NickName'].startswith(PREFIX):
             groups.append(group['UserName'])
