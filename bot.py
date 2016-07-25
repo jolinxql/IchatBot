@@ -15,7 +15,7 @@ def update_groups():
     global groups
     groups = []
     for group in itchat.get_chatrooms(update=True):
-        if group['NickName'].startswith(PREFIX) and (group['NickName'] not in block_groups):
+        if group['NickName'].startswith(PREFIX):
             groups.append(group['UserName'])
             itchat.get_batch_contract(group['UserName'])
 
@@ -32,7 +32,7 @@ def destinations(msg):
     for gid in groups:
         if gid != msg['FromUserName']:
             destinations.append(gid)
-        else:
+        elif gid not in block_groups:
             in_group = True
     if not in_group: return []
     return destinations
