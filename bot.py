@@ -2,7 +2,7 @@
 
 import threading
 import time
-import xml.sax.saxutils as saxutils
+import sys
 
 import itchat
 from itchat.tools import htmlParser
@@ -19,8 +19,10 @@ def update_groups():
             groups.append(group['UserName'])
             itchat.get_batch_contract(group['UserName'])
     print(groups)
-    print(time.ctime())
-    threading.Timer(55, update_groups).start()
+    print(time.time())
+    thread = threading.Timer(55, update_groups)
+    thread.daemon = True
+    thread.start()
 
 
 def destinations(msg):
@@ -73,6 +75,6 @@ def complex_reply():
 
 
 if __name__ == '__main__':
-    itchat.auto_login(hotReload=True)
+    itchat.auto_login(hotReload=True, enableCmdQR=True)
     complex_reply()
     itchat.dump_login_status()
