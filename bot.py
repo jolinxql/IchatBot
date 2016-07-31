@@ -81,13 +81,16 @@ def complex_reply():
     def download_files(msg):
         dict = {'Picture': u"图片", "Gif": u"表情", "Recording": u"录音", "Video": u"小视频", "Attachment": u"文件"}
         fileDir = './storage/%s%s' % (msg['Type'], int(time.time()))
+        flag = True
         if msg['Type'] == 'Gif': fileDir += '.gif'
         msg['Text'](fileDir)
         for destination in destinations(msg):
             itchat.send(u'%s发送了%s' % (msg['ActualDisplayName'], dict[msg['Type']]), destination)
             if not itchat.send('@%s@%s' % ('img' if msg['Type'] == 'Picture' or msg['Type'] == 'Gif' else 'fil', fileDir), destination):
-                print 'bad~'
-                itchat.send(u'[暂不支持官方表情]', destination)
+                flag = False
+        if not flag:
+            for destination in destinations(msg):
+                itchat.send(u'[暂不支持的官方表情]', destination)
 
 
 
