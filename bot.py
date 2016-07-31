@@ -47,8 +47,9 @@ def destinations(msg):
 
 
 def complex_reply():
-    @itchat.msg_register(['Text', 'Map', 'Card', 'Sharing'], isGroupChat=True)
+    @itchat.msg_register(['Text', 'Map', 'Sharing'], isGroupChat=True)
     def text_reply(msg):
+        print msg
         url = ''
         if msg['Url']: url = ' - ' + htmlParser.unescape(msg['Url'])
         for destination in destinations(msg):
@@ -67,6 +68,10 @@ def complex_reply():
     #     print(msg)
     #     itchat.send('@url@%s' % (msg['Content']), msg['FromUserName'])
 
+    @itchat.msg_register(['Card'], isGroupChat=True)
+    def card_reply(msg):
+        print msg
+        
     @itchat.msg_register(['Picture', 'Recording', 'Attachment', 'Video', 'Gif'], isGroupChat=True)
     def download_files(msg):
         dict = {'Picture': "图片", "Gif": "表情", "Recording": "录音", "Video": "小视频", "Attachment": "文件"}
