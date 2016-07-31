@@ -99,5 +99,6 @@ def complex_reply():
 
 if __name__ == '__main__':
     itchat.auto_login(hotReload=True, enableCmdQR=True)
+    print PREFIX
     complex_reply()
     itchat.dump_login_status()
