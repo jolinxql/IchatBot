@@ -85,8 +85,9 @@ def complex_reply():
         msg['Text'](fileDir)
         for destination in destinations(msg):
             itchat.send(u'%s发送了%s' % (msg['ActualDisplayName'], dict[msg['Type']]), destination)
-            print itchat.send('@%s@%s' % ('img' if msg['Type'] == 'Picture' or msg['Type'] == 'Gif' else 'fil', fileDir),
-                        destination)
+            if not itchat.send('@%s@%s' % ('img' if msg['Type'] == 'Picture' or msg['Type'] == 'Gif' else 'fil', fileDir), destination):
+                print 'bad~'
+                itchat.send(u'[暂不支持官方表情]', destination)
 
 
 

@@ -491,8 +491,7 @@ class client(object):
         if toUserName is None: toUserName = self.storageClass.userName
         mediaId = self.__upload_file(fileDir, isPicture = not fileDir[-4:] == '.gif')
         if mediaId is None or mediaId == '':
-            self.send_msg('Test', toUserName)
-            return True
+            return False
         url = '%s/webwxsendmsgimg?fun=async&f=json'%self.loginInfo['url']
         payloads = {
             'BaseRequest': self.loginInfo['BaseRequest'],
