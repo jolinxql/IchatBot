@@ -13,15 +13,18 @@ PREFIX = u'机器人-'
 
 
 def update_groups():
-    global groups
-    groups = []
-    bgroups = []
+    global groups, bgroups
+    tmp_groups = []
+    tmp_bgroups = []
     for group in itchat.get_chatrooms(update=True):
         if group['NickName'].startswith(PREFIX):
-            groups.append(group['UserName'])
+            tmp_groups.append(group['UserName'])
             itchat.get_batch_contract(group['UserName'])
         if group['NickName'] in block_groups :
-            bgroups.append(group['UserName'])
+            tmp_bgroups.append(group['UserName'])
+
+    groups = tmp_groups
+    bgroups = tmp_bgroups
 
     print(groups)
     print(bgroups)
