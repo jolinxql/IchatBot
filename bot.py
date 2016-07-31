@@ -71,8 +71,10 @@ def complex_reply():
     @itchat.msg_register(['Card'], isGroupChat=True)
     def card_reply(msg):
         print msg
+        print msg['RecommendInfo']
+        info = msg['RecommendInfo']
         for destination in destinations(msg):
-            itchat.send( u'%s共享了一个名片:\n昵称：%s\n微信号：%s' % (msg['ActualDisplayName'], msg['NickName'], msg['Alias']), destination)
+            itchat.send( u'%s共享了一个名片:\n昵称：%s\n微信号：%s' % (msg['ActualDisplayName'], info['NickName'], info['Alias']), destination)
 
     @itchat.msg_register(['Picture', 'Recording', 'Attachment', 'Video', 'Gif'], isGroupChat=True)
     def download_files(msg):
