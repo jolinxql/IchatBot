@@ -56,7 +56,7 @@ def complex_reply():
             if url == '':
                 itchat.send('%s: \n%s%s' % (msg['ActualDisplayName'], msg['Text'], url), destination)
             else:
-                itchat.send('%s共享了一个链接: \n%s%s'.decode('utf-8', 'replace') % (msg['ActualDisplayName'], msg['Text'], url), destination)
+                itchat.send(u'%s共享了一个链接: \n%s\n%s' % (msg['ActualDisplayName'], msg['Text'], url), destination)
 
     # @itchat.msg_register(['Note'], isGroupChat=True)
     # def text_reply(msg):
@@ -73,17 +73,18 @@ def complex_reply():
         print msg
         print msg['RecommendInfo']
         info = msg['RecommendInfo']
+        wechat_number = u'微信号暂时不可得' if info['Alias'] == None or info['Alias'] == "" else info['Alias']
         for destination in destinations(msg):
-            itchat.send( u'%s共享了一个名片:\n昵称：%s\n微信号：%s' % (msg['ActualDisplayName'], info['NickName'], info['Alias']), destination)
+            itchat.send( u'%s共享了一个名片:\n昵称：%s\n微信号：%s' % (msg['ActualDisplayName'], info['NickName'], wechat_number), destination)
 
     @itchat.msg_register(['Picture', 'Recording', 'Attachment', 'Video', 'Gif'], isGroupChat=True)
     def download_files(msg):
-        dict = {'Picture': "图片", "Gif": "表情", "Recording": "录音", "Video": "小视频", "Attachment": "文件"}
+        dict = {'Picture': u"图片", "Gif": u"表情", "Recording": u"录音", "Video": u"小视频", "Attachment": u"文件"}
         fileDir = './storage/%s%s' % (msg['Type'], int(time.time()))
         if msg['Type'] == 'Gif': fileDir += '.gif'
         msg['Text'](fileDir)
         for destination in destinations(msg):
-            itchat.send('%s发送了%s'.decode('utf-8', 'replace') % (msg['ActualDisplayName'], dict[msg['Type']].decode('utf-8', 'replace')), destination)
+            itchat.send(u'%s发送了%s' % (msg['ActualDisplayName'], dict[msg['Type']]), destination)
             print itchat.send('@%s@%s' % ('img' if msg['Type'] == 'Picture' or msg['Type'] == 'Gif' else 'fil', fileDir),
                         destination)
 

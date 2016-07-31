@@ -402,8 +402,8 @@ class client(object):
             self.storageClass.groupDict[msg['FromUserName']] = {member['UserName']: member for member in groupMemberList}
         msg['ActualUserName'] = actualUserName
         msg['ActualNickName'] = self.storageClass.groupDict[msg['FromUserName']][actualUserName]['NickName']
-        msg['ActualDisplayName'] = '【%s - '.decode('utf8', 'replace') % (self.storageClass.groupDict[msg['FromUserName']][actualUserName]['DisplayName'] or msg['ActualNickName'])
-        msg['ActualDisplayName'] += '%s】'.decode('utf8', 'replace') % (self.__get_group_short_name(self.storageClass.find_group_nickname(msg['FromUserName'])))
+        msg['ActualDisplayName'] = u'【%s - '% (self.storageClass.groupDict[msg['FromUserName']][actualUserName]['DisplayName'] or msg['ActualNickName'])
+        msg['ActualDisplayName'] += u'%s】' % (self.__get_group_short_name(self.storageClass.find_group_nickname(msg['FromUserName'])))
 
         msg['Content']        = content
         msg['isAt']           = u'@%s\u2005'%self.storageClass.nickName in msg['Content']
@@ -491,7 +491,7 @@ class client(object):
         if toUserName is None: toUserName = self.storageClass.userName
         mediaId = self.__upload_file(fileDir, isPicture = not fileDir[-4:] == '.gif')
         if mediaId is None or mediaId == '':
-            self.send_msg('[暂不支持官方表情]'.decode('utf-8', 'replace'), toUserName)
+            self.send_msg(u'[暂不支持官方表情]', toUserName)
             return False
         url = '%s/webwxsendmsgimg?fun=async&f=json'%self.loginInfo['url']
         payloads = {
