@@ -8,8 +8,8 @@ from itchat.tools import htmlParser
 
 groups = []
 bgroups = []
-block_groups = [u'机器人-U']
-PREFIX = u'机器人-'
+block_groups = [u'西码会-U']
+PREFIX = u'西码会-'
 
 
 def update_groups():
@@ -47,6 +47,7 @@ def destinations(msg):
 
 
 def complex_reply():
+
     @itchat.msg_register(['Text', 'Map', 'Sharing'], isGroupChat=True)
     def text_reply(msg):
         print msg
@@ -91,8 +92,6 @@ def complex_reply():
         if not flag:
             for destination in destinations(msg):
                 itchat.send(u'[暂不支持的官方表情]', destination)
-
-
 
     update_groups()
     itchat.run()
