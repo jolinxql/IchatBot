@@ -8,8 +8,8 @@ from itchat.tools import htmlParser
 
 groups = []
 bgroups = []
-block_groups = [u'西码会-U']
-PREFIX = u'西码会-'
+block_groups = [u'机器人-U']
+PREFIX = u'机器人-'
 
 
 def update_groups():
